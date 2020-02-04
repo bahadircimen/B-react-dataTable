@@ -28,11 +28,6 @@ module.exports = {
 		],
 		"@babel/plugin-syntax-dynamic-import",
 		"@babel/plugin-proposal-object-rest-spread",
-		"@babel/plugin-proposal-class-properties",
-		['react-directives',
-			{
-				"prefix": "r",
-				"pragmaType": "React"
-			}]
+		"@babel/plugin-proposal-class-properties"
 	],
 };
