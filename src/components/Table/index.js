@@ -1,111 +1,139 @@
 import React, {Component} from 'react';
-import styles from './styles.scss';
-
-const RenderData = (state) =>{
-    return state.keys.map((key)=>{
-        return <td key={state.data[key]}>{state.data[key]}</td>
-    })
-};
-
+import styles from "./styles.scss";
+import image from './sort.png';
 class Table extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: [
-                { name: 'Wasif', age: 21, email: 'wasif@email.com' },
-                { name: 'Ali', age: 19, email: 'ali@email.com' },
-                { name: 'Saad', age: 16, email: 'saad@email.com' },
-                { name: 'Asad', age: 25, email: 'asad@email.com' },
-                { name: 'alpkan', age: 21, email: 'wasif@email.com' },
-                { name: 'barış', age: 19, email: 'ali@email.com' },
-                { name: 'merve', age: 16, email: 'saad@email.com' },
-                { name: 'bahadır', age: 25, email: 'asad@email.com' },
-                { name: 'kenan', age: 21, email: 'wasif@email.com' },
-                { name: 'tanzer', age: 19, email: 'ali@email.com' },
-                { name: 'ruken', age: 16, email: 'saad@email.com' },
-                { name: 'berk', age: 25, email: 'asad@email.com' },
-                { name: 'serkan', age: 25, email: 'asad@email.com' },
-
-            ],
+            text:"",
+            sortOrder:"asc",
+            sortText:"",
+            css:"./styles.scss"
         }
     }
+    selectTheme=()=>{
+        let d= document.getElementById("theme").value;
+        if(d!="renk secin"){document.bgColor=d;
+        document.cookie="theme = "+d+"experies = Sun, 15 Jul 2025 00:00:01 GMT"}
 
-    /*****dynamic   column 2**/
+    }
+
     tableValues = () => {
-            return Object.values(this.state.data);
+        let arr = [];
+        this.props.data.sort(this.compare(this.state.sortText,this.state.sortOrder)).map((row) => {
+            let rowData = [];
+            this.props.columns.map((column) => {
+                rowData.push({
+                    key: column.key,
+                    sortable: column.sortable,
+                    searchable: column.searchable,
+                    texts: row[column.key]
+                })
+            });
+            arr.push(rowData);
+        });
+        return arr
     };
 
-    tableA = () => {
-        return this.tableValues().map((d,index) => {
+    renderTableHeader = () => {
+        return this.props.columns.map(d => {
+            return(
+            d.sortable===true ?
+                <td key={d.key} onClick={this.sortChange} >{d.key.toUpperCase()}<span id={d.key}><img id={d.key}
+                    src={image}/>
+                </span></td> :
+                <td key={d.key}>{d.key.toUpperCase()}</td>
+        )
+        })
+    };
+
+    tableSearch = () => {
+        return this.tableValues().filter((row)=>{
+            return row.some((cell)=>{
+                return cell.searchable===true&&cell.texts.toString().toUpperCase().includes(this.state.text)
+            })
+        })
+    };
+
+    renderTableBody=()=>{
+        return this.tableSearch().map((row,index)=>{
+            return (<tr key={index}>
+                {row.map(cell=>{
+                    return <td key={cell.key}>
+                        {cell.texts}
+                    </td>
+                })}
+            </tr>);
+        })
+
+    };
+
+    compare=(key, order)=> {
+        return  (a, b)=> {
+            if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
+                return 0;
+            }
+            const keyA = (typeof a[key] === 'string')
+                ? a[key].toUpperCase() : a[key];
+            const keyB = (typeof b[key] === 'string')
+                ? b[key].toUpperCase() : b[key];
+
+            let comparison = 0;
+            if (keyA > keyB) {
+                comparison = 1;
+            } else if (keyA < keyB) {
+                comparison = -1;
+            }
             return (
-                    <td key={index}>{d}</td>
-            )
+                (order === 'desc') ? (comparison * -1) : comparison
+            );
+        };
+    };
+
+    sortChange = (event) => {
+        const { sortOrder } = this.state;
+        let nextSort;
+        sortOrder === "asc" ? nextSort = "desc" : nextSort= "asc";
+        this.setState({
+            sortOrder: nextSort,sortText: event.target.id
         })
     };
 
-    tableKeys = () => {
-        return Object.keys(this.state.data[0]);
+    textSubmit=(event)=> {
+        event.preventDefault();
     };
 
-    tableHeader = () => {
-        return this.tableKeys().map((key) => {
-            return <th key={key}>{key.toUpperCase()}</th>
-        })
+    textChange=(event)=> {
+        this.setState({text: event.target.value.toUpperCase()});
+        event.preventDefault();
     };
-
-    /**manuel column
-     tableData = () => {
-        return this.state.data.map((d, index) => {
-            return (
-                <tr key={index}>
-                    <td>{d.name}</td>
-                    <td>{d.age}</td>
-                    <td>{d.email}</td>
-                    <td>{index}</td>
-                </tr>
-            )
-        })
-    }; */
-
-    tableData = () => {
-        return this.state.data.map((d, index)=>{
-            return <tr key={index}>
-                <RenderData key={index} data={d} keys={this.tableKeys()} />
-            </tr>
-        })
-    };
-
-    /****tableB = () => {
-        return this.state.data.map((d,index)=> {
-            return (
-                <tr key={index}>
-                    <td>{this.tableKeys().map}</td>
-                </tr>
-            )
-        })
-    };
-*/
 
     render() {
-        console.log(this.tableA());
         return (
             <div>
+                <form onSubmit={this.textSubmit}>
+                    <label>
+                        Search:
+                        <input type="text" value={this.state.text} onChange={this.textChange} />
+                    </label>
+                </form>
                 <table>
                     <thead>
-                        <tr>
-                            {this.tableHeader()}
-                        </tr>
+                    <tr>
+                        {this.renderTableHeader()}
+
+                    </tr>
                     </thead>
                     <tbody>
-                        {this.tableData()}
+                        {this.renderTableBody()}
                     </tbody>
                     <tfoot>
                     <tr>
-                        {this.tableHeader()}
+                        {this.renderTableHeader()}
                     </tr>
                     </tfoot>
                 </table>
-                    Showing {this.state.data.length} entries.
+                Showing {this.props.data.length} entries.
             </div>
         );
     }

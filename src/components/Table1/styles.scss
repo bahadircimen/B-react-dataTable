@@ -1,9 +1,4 @@
-div {
-  width: 100%;
-  justify-content: center;
-  & form {
-    justify-content: right;
-  }
+div {width: 100%;
   & table {
     border-collapse: collapse;
     width: 100%;
@@ -11,11 +6,6 @@ div {
       width: 100%;
       text-align: left;
     }
-      & img {
-        width: 12px;
-        height: 12px;
-        cursor: pointer;
-      }
     & tbody {
       width: 100%;
       & tr {
@@ -35,6 +25,7 @@ div {
     & tfoot {
       width: 100%;
       text-align: left;
+
     }
   }
 }
