@@ -32,7 +32,7 @@ class Table extends Component {
         return this.props.columns.map(d => {
             return(
             d.sortable===true ?
-                <td key={d.key}onClick={this.sortChange} >{d.key.toUpperCase()}<span><img id={d.key}
+                <td key={d.key}onClick={this.sortChange} >{d.key.toUpperCase()}<span><img data-key={d.key}
                     src={image}/>
                 </span></td> :
                 <td key={d.key}>{d.key.toUpperCase()}</td>
@@ -86,11 +86,11 @@ class Table extends Component {
     sortChange = (event) => {
         const { sortOrder } = this.state;
         let nextSort;
-        if(event.target.id!==this.state.sortText){nextSort = "asc"}
-        else if(event.target.id===this.state.sortText && sortOrder==="asc") {nextSort= "desc"}
-        else if(event.target.id===this.state.sortText && sortOrder==="desc"){nextSort="asc"}
+        if(event.target.getAttribute("data-key")!==this.state.sortText){nextSort = "asc"}
+        else if(event.target.getAttribute("data-key")===this.state.sortText && sortOrder==="asc") {nextSort= "desc"}
+        else if(event.target.getAttribute("data-key")===this.state.sortText && sortOrder==="desc"){nextSort="asc"}
         this.setState({
-            sortOrder: nextSort,sortText: event.target.id
+            sortOrder: nextSort,sortText: event.target.getAttribute("data-key")
         })
     };
 
