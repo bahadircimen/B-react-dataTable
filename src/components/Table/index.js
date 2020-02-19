@@ -8,14 +8,7 @@ class Table extends Component {
             text:"",
             sortOrder:"asc",
             sortText:"",
-            css:"./styles.scss"
         }
-    }
-    selectTheme=()=>{
-        let d= document.getElementById("theme").value;
-        if(d!="renk secin"){document.bgColor=d;
-        document.cookie="theme = "+d+"experies = Sun, 15 Jul 2025 00:00:01 GMT"}
-
     }
 
     tableValues = () => {
@@ -39,7 +32,7 @@ class Table extends Component {
         return this.props.columns.map(d => {
             return(
             d.sortable===true ?
-                <td key={d.key} onClick={this.sortChange} >{d.key.toUpperCase()}<span id={d.key}><img id={d.key}
+                <td key={d.key}onClick={this.sortChange} >{d.key.toUpperCase()}<span><img id={d.key}
                     src={image}/>
                 </span></td> :
                 <td key={d.key}>{d.key.toUpperCase()}</td>
@@ -68,7 +61,7 @@ class Table extends Component {
 
     };
 
-    compare=(key, order)=> {
+    compare=(key, order = "desc")=> {
         return  (a, b)=> {
             if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
                 return 0;
@@ -93,7 +86,9 @@ class Table extends Component {
     sortChange = (event) => {
         const { sortOrder } = this.state;
         let nextSort;
-        sortOrder === "asc" ? nextSort = "desc" : nextSort= "asc";
+        if(event.target.id!==this.state.sortText){nextSort = "asc"}
+        else if(event.target.id===this.state.sortText && sortOrder==="asc") {nextSort= "desc"}
+        else if(event.target.id===this.state.sortText && sortOrder==="desc"){nextSort="asc"}
         this.setState({
             sortOrder: nextSort,sortText: event.target.id
         })
