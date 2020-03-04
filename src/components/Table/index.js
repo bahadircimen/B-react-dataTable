@@ -33,14 +33,17 @@ class Table extends Component {
         return arr
     };
 
-    renderTableHeader = () => {
+    renderTableHeader = (event) => {
         return this.props.columns.map(d => {
+            console.log(d.key);
             return(
             d.sortable===true
                 ?
                 <td key={d.key} onClick={this.sortChange}>{d.key.toUpperCase()}
                 <span>
-                <i data-key={d.key} className={"fas fa-sort"+this.state.sortImg+" fa-xs"}/>
+                    {d.key===this.state.sortText ?
+                <i data-key={d.key} className={"fas fa-sort"+this.state.sortImg+" fa-xs"}/>:
+                        <i data-key={d.key} className={"fas fa-sort fa-xs"}/>}
                 </span>
                 </td>
                 :

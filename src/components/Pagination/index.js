@@ -21,8 +21,6 @@ class Pagination extends Component {
         let b=pg.slice(this.props.page-2,this.totalPage());
         let c=pg.slice(this.totalPage()-4,this.totalPage());
         let d=pg.slice(this.props.page-2,this.props.page-1+2);
-        console.log(c);
-        console.log(b);
         if(this.props.page*1<=this.totalPage()-4&&this.props.page*1===1)
         {
         return a.map(d=>{
