@@ -1,13 +1,18 @@
 import React, {Component} from 'react';
 import styles from "./styles.scss";
 import image from './sort.png';
+import Pagination from "../Pagination";
 class Table extends Component {
     constructor(props) {
         super(props);
+        if(!props.columns.every((el) => "key" in el))
+            console.warn("missing key");
         this.state = {
             text:"",
-            sortOrder:"asc",
+            sortOrder:"",
             sortText:"",
+            sortImg:"",
+            theme:""
         }
     }
 
@@ -31,10 +36,14 @@ class Table extends Component {
     renderTableHeader = () => {
         return this.props.columns.map(d => {
             return(
-            d.sortable===true ?
-                <td key={d.key}onClick={this.sortChange} >{d.key.toUpperCase()}<span><img data-key={d.key}
-                    src={image}/>
-                </span></td> :
+            d.sortable===true
+                ?
+                <td key={d.key} onClick={this.sortChange}>{d.key.toUpperCase()}
+                <span>
+                <i data-key={d.key} className={"fas fa-sort"+this.state.sortImg+" fa-xs"}/>
+                </span>
+                </td>
+                :
                 <td key={d.key}>{d.key.toUpperCase()}</td>
         )
         })
@@ -84,13 +93,13 @@ class Table extends Component {
     };
 
     sortChange = (event) => {
-        const { sortOrder } = this.state;
         let nextSort;
-        if(event.target.getAttribute("data-key")!==this.state.sortText){nextSort = "asc"}
-        else if(event.target.getAttribute("data-key")===this.state.sortText && sortOrder==="asc") {nextSort= "desc"}
-        else if(event.target.getAttribute("data-key")===this.state.sortText && sortOrder==="desc"){nextSort="asc"}
+        let sortimg;
+        if(event.target.getAttribute("data-key")!==this.state.sortText){nextSort = "asc"; sortimg="-down"}
+        else if(event.target.getAttribute("data-key")===this.state.sortText && this.state.sortOrder==="asc") {nextSort= "desc"; sortimg="-up"}
+        else if(event.target.getAttribute("data-key")===this.state.sortText && this.state.sortOrder==="desc"){nextSort="asc"; sortimg="-down"}
         this.setState({
-            sortOrder: nextSort,sortText: event.target.getAttribute("data-key")
+            sortImg: sortimg,sortOrder: nextSort,sortText: event.target.getAttribute("data-key")
         })
     };
 
@@ -103,9 +112,44 @@ class Table extends Component {
         event.preventDefault();
     };
 
+    changeTheme = () =>{
+        this.setState({
+            theme: document.getElementById("theme").value
+        })
+    };
+    //
+    // createCookie=(cookieName,cookieValue,daysToExpire)=>
+    // {
+    //     let {getTime, setTime, toGMTString} = new Date();
+    //     setTime(getTime()+(daysToExpire*24*60*60*1000));
+    //     document.cookie = cookieName + "=" + cookieValue + "; expires=" + toGMTString();
+    // };
+    // accessCookie=(cookieName)=>
+    // {
+    //     let name = cookieName + "=";
+    //     let allCookieArray = document.cookie.split(';');
+    //     for(let i=0; i<allCookieArray.length; i++)
+    //     {
+    //         let temp = allCookieArray[i].trim();
+    //         if (temp.indexOf(name)===0)
+    //             return temp.substring(name.length,temp.length);
+    //     }
+    //     return "";
+    // };
+    //
+    // checkCookie=()=>
+    // {
+    //     let theme = this.accessCookie("themeCookie");
+    //     theme===""||theme!==this.state.theme ?this.createCookie("themeCookie", [this.state.theme], 1):null;
+    // };
+
+    checkTheme=()=>{
+        return this.props.theme||"";
+    };
+
     render() {
         return (
-            <div>
+            <div id="div" className={this.checkTheme()}>
                 <form onSubmit={this.textSubmit}>
                     <label>
                         Search:
@@ -120,7 +164,7 @@ class Table extends Component {
                     </tr>
                     </thead>
                     <tbody>
-                        {this.renderTableBody()}
+                    {this.renderTableBody()}
                     </tbody>
                     <tfoot>
                     <tr>
@@ -128,7 +172,22 @@ class Table extends Component {
                     </tr>
                     </tfoot>
                 </table>
-                Showing {this.props.data.length} entries.
+                <Pagination
+                    pageSize={this.props.pageSize}
+                    totalCount={this.props.totalCount}
+                    changePage={this.props.changePage}
+                    changePageUp={this.props.changePageUp}
+                    changePageDown={this.props.changePageDown}
+                    page={this.props.page}
+                />
+                <span>Showing {this.props.page*10-9} to {this.props.page*10} of {this.props.totalCount} entries.</span>
+                <div>
+                    <select name="" id="theme" onChange={this.changeTheme}>
+                        <option value="selectTheme">Select Theme</option>
+                        <option value="white">Light</option>
+                        <option value="dimgrey">Dark</option>
+                    </select>
+                </div>
             </div>
         );
     }
