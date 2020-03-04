@@ -1,9 +1,10 @@
- dark{
+ .dark{
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
-  color: #d7ffac;
+   color: white;
+  background-color: #303030;
 
   & select {
     align-self: flex-end;
@@ -38,21 +39,21 @@
       width: 100%;
 
       & tr {
-        background-color: white;
+        background-color: #404040;
         border-bottom: 1px solid lightgrey;
         border-top: 1px solid black;
       }
 
       & tr:nth-child(even) {
-        background-color: #f2f2f2;
+        background-color: dimgrey;
       }
 
       & tr:nth-last-child(1) {
-        border-bottom: 1px solid black;
+        border-bottom: 1px solid white;
       }
 
       & tr:hover {
-        background-color: lightgrey;
+        background-color: black;
       }
     }
 
@@ -63,6 +64,10 @@
       & td{
         min-width: 52px;
         max-width: 100px;
+
+        & i {
+          cursor:pointer;
+        }
       }
     }
   }
@@ -130,9 +135,12 @@ div{
 
          & td{
            min-width: 52px;
-           max-width: 100px;
+
+           &i {
+             cursor: pointer;
+           }
          }
        }
      }
-}
+   }
 

@@ -115,9 +115,9 @@ class Table extends Component {
         event.preventDefault();
     };
 
-    changeTheme = () =>{
+    changeTheme = (event) =>{
         this.setState({
-            theme: document.getElementById("theme").value
+            theme: event.target.value
         })
     };
     //
@@ -147,12 +147,12 @@ class Table extends Component {
     // };
 
     checkTheme=()=>{
-        return this.props.theme||"";
+        return this.state.theme||"";
     };
 
     render() {
         return (
-            <div id="div" className={this.checkTheme()}>
+            <div id="div" className={"src-components-Table-___styles__"+this.checkTheme()+"___2bhYl"}>
                 <form onSubmit={this.textSubmit}>
                     <label>
                         Search:
@@ -163,7 +163,6 @@ class Table extends Component {
                     <thead>
                     <tr>
                         {this.renderTableHeader()}
-
                     </tr>
                     </thead>
                     <tbody>
@@ -187,8 +186,8 @@ class Table extends Component {
                 <div>
                     <select name="" id="theme" onChange={this.changeTheme}>
                         <option value="selectTheme">Select Theme</option>
-                        <option value="white">Light</option>
-                        <option value="dimgrey">Dark</option>
+                        <option value="">Light</option>
+                        <option value="dark">Dark</option>
                     </select>
                 </div>
             </div>
