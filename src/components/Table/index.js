@@ -180,6 +180,7 @@ class Table extends Component {
                     changePage={this.props.changePage}
                     changePageUp={this.props.changePageUp}
                     changePageDown={this.props.changePageDown}
+                    changePageSize={this.props.changePageSize}
                     page={this.props.page}
                 />
                 <span>Showing {this.props.page*10-9} to {this.props.page*10} of {this.props.totalCount} entries.</span>

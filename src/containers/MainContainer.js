@@ -14,7 +14,7 @@ class MainContainer extends Component {
                 {key: "body", sortable: false, searchable: true}
             ],
             data: [],
-            totalCount:"",
+            totalCount:"100",
             page:"1",
             pageSize:"10",
             theme:"dark",
@@ -33,16 +33,35 @@ class MainContainer extends Component {
         this.setState({page:event.target.value})
     };
 
+    changePageSize=(event)=>{
+        let page=((this.state.page*1)*(this.state.pageSize*1))-(this.state.pageSize*1)+1;
+        this.setState({pageSize:event.target.value*1},()=>
+                    this.setState({page:Math.ceil(page/(this.state.pageSize*1))})
+        );
+    };
+
+   /* changePageSize=(event)=>{
+        let page=(this.state.page*1)*(this.state.pageSize*1);
+        this.setState(prevState=>
+            ({pageSize:event.target.value},()=>
+                this.setState(this.state.pageSize>=prevState.pageSize
+                    ?{page:Math.ceil(page/(this.state.pageSize*1))}
+                    :{page:Math.floor(page/(this.state.pageSize*1))}
+                    )
+            )
+        );
+    };*/
+
     async componentDidMount() {
-        let url="http://jsonplaceholder.typicode.com/posts"
+        let url="http://jsonplaceholder.typicode.com/posts";
         Axios.get(url, {
             params: {
                 _start: (this.state.page-1)*this.state.pageSize,
-                _limit:this.state.pageSize
+                _limit:this.state.pageSize*1
             }
         }).then(obj => {
             let data = obj.data;
-            this.setState({data:data,totalCount:obj.data.length*this.state.pageSize})
+            this.setState({data:data})
         });
         }
 
@@ -78,7 +97,8 @@ class MainContainer extends Component {
     }*/
 
     componentDidUpdate(prevProps, prevState) {
-    this.state.page !== prevState.page? this.componentDidMount():null
+    this.state.page !== prevState.page||this.state.pageSize!==prevState.pageSize? this.componentDidMount():null
+
     }
 
     componentWillUnmount() {
@@ -100,6 +120,7 @@ class MainContainer extends Component {
                                 changePage={this.changePage}
                                 changePageUp={this.changePageUp}
                                 changePageDown={this.changePageDown}
+                                changePageSize={this.changePageSize}
                                 theme={this.state.theme}
                                 data={this.state.data}
                                 columns={this.state.columns}
