@@ -79,10 +79,11 @@ class Pagination extends Component {
     };
 
     render() {
-        console.log(this.totalPage())
+        console.log(this.totalPage());
         return (
             <div>
                 <div className={styles.pagination}>
+                    Page:{this.props.page}
                     {this.props.page*1===1
                         ?<button disabled style={{cursor:"not-allowed"}} key="leftBtn"><i className="fas fa-angle-double-left"/></button>
                         :<button key="leftBtn" onClick={this.props.changePageDown}><i className="fas fa-angle-double-left"/></button>
@@ -94,7 +95,6 @@ class Pagination extends Component {
                         ?<button disabled style={{cursor:"not-allowed"}} key="rightBtn"><i className="fas fa-angle-double-right"/></button>
                         :<button key="rightBtn" onClick={this.props.changePageUp}><i className="fas fa-angle-double-right"/></button>
                     }
-                    Page:{this.props.page}
                 </div>
                 <div className={styles.pageSize}>
                     Page Size:{this.PageSizes()}

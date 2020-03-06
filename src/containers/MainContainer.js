@@ -17,9 +17,15 @@ class MainContainer extends Component {
             totalCount:"100",
             page:"1",
             pageSize:"10",
-            theme:"dark",
+            theme:"light",
         }
     }
+
+    changeTheme = (event) =>{
+        this.setState({
+            theme: event.target.value
+        })
+    };
 
     changePageUp=()=>{
        this.setState({page:this.state.page*1+1})
@@ -34,11 +40,17 @@ class MainContainer extends Component {
     };
 
     changePageSize=(event)=>{
-        let page=((this.state.page*1)*(this.state.pageSize*1))-(this.state.pageSize*1)+1;
         this.setState({pageSize:event.target.value*1},()=>
-                    this.setState({page:Math.ceil(page/(this.state.pageSize*1))})
+            this.setState({page:1})
         );
     };
+
+    // changePageSize=(event)=>{
+    //     let page=((this.state.page-1)*(this.state.pageSize*1));
+    //     this.setState({pageSize:event.target.value*1},()=>
+    //                 this.setState({page:(page/(this.state.pageSize*1))})
+    //     );
+    // };
 
    /* changePageSize=(event)=>{
         let page=(this.state.page*1)*(this.state.pageSize*1);
@@ -49,7 +61,7 @@ class MainContainer extends Component {
                     :{page:Math.floor(page/(this.state.pageSize*1))}
                     )
             )
-        );
+        );"
     };*/
 
     async componentDidMount() {
@@ -106,14 +118,21 @@ class MainContainer extends Component {
 
     }
 
+    style=()=>{
+        let a="src-containers-___styles__container"+this.state.theme+"___";
+        if(this.state.theme==="dark")
+        {return a+"LBGYt"}
+        else {return a+"1yula"}
+    };
 
     render() {
         return (
             <Fragment>
-                <div className={styles.container}>
+                <div className={this.style()}>
                     <div className={styles.row}>
                         <div className={styles.colMd9}>
                             <Table
+                                theme={this.state.theme}
                                 pageSize={this.state.pageSize}
                                 totalCount={this.state.totalCount}
                                 page={this.state.page}
@@ -121,7 +140,7 @@ class MainContainer extends Component {
                                 changePageUp={this.changePageUp}
                                 changePageDown={this.changePageDown}
                                 changePageSize={this.changePageSize}
-                                theme={this.state.theme}
+                                changeTheme={this.changeTheme}
                                 data={this.state.data}
                                 columns={this.state.columns}
                             />

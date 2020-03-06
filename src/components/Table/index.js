@@ -115,11 +115,6 @@ class Table extends Component {
         event.preventDefault();
     };
 
-    changeTheme = (event) =>{
-        this.setState({
-            theme: event.target.value
-        })
-    };
     //
     // createCookie=(cookieName,cookieValue,daysToExpire)=>
     // {
@@ -152,7 +147,7 @@ class Table extends Component {
 
     render() {
         return (
-            <div id="div" className={"src-components-Table-___styles__"+this.checkTheme()+"___2bhYl"}>
+            <div id="div" className={"src-components-Table-___styles__"+this.props.theme+"___2bhYl"}>
                 <form onSubmit={this.textSubmit}>
                     <label>
                         Search:
@@ -185,9 +180,8 @@ class Table extends Component {
                 />
                 <span>Showing {this.props.page*10-9} to {this.props.page*10} of {this.props.totalCount} entries.</span>
                 <div>
-                    <select name="" id="theme" onChange={this.changeTheme}>
-                        <option value="selectTheme">Select Theme</option>
-                        <option value="">Light</option>
+                    <select name="" id="theme" onChange={this.props.changeTheme}>
+                        <option value="light">Light</option>
                         <option value="dark">Dark</option>
                     </select>
                 </div>
