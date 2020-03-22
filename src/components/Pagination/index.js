@@ -10,10 +10,13 @@ class Pagination extends Component {
     }
 
     PageSizes=()=>{
-        let ps=[5,10,20,40,60,100]
-        return ps.map((d,index)=>{
-            return <button key={index} value={d} onClick={this.props.changePageSize}>{d}</button>
+        let ps=[10,20,40,60,100];
+        return <select name="" id="" onChange={this.props.changePageSize}> {
+            ps.map((d,index)=>{
+            return <option key={index} value={d}>{d}</option>
         })
+        }
+        </select>
     };
 
     totalPage=()=>{
@@ -21,79 +24,125 @@ class Pagination extends Component {
     };
 
     createButton=()=>{
-        let pg=[];
-        for(let i=1; i<this.totalPage()+1; i++)
-            pg.push(i);
-        let a=pg.slice(this.props.page-1,this.props.page-1+2);
-        let b=pg.slice(this.props.page-2,this.totalPage());
-        let c=pg.slice(this.totalPage()-4,this.totalPage());
-        let d=pg.slice(this.props.page-2,this.props.page-1+2);
-        let e=pg.slice(this.totalPage()-3,this.totalPage());
-        let f=pg.slice(this.totalPage()-2,this.totalPage());
-        let g=pg.slice(this.totalPage()-1,this.totalPage());
-        if(this.props.page*1<=this.totalPage()-4&&this.props.page*1===1){
-        return a.map(d=>{
-            return <button onClick={this.props.changePage} value={d} key={d}>{d}</button>
-        });
-        }
+      let pg=[];
+      for(let i=1; i<this.totalPage()+1; i++)
+          pg.push(i);
+      let a=pg.slice(1,5);
+      let b=pg.slice(this.props.page-2,this.props.page-1+2);
+      let c=pg.slice(this.totalPage()-5,this.totalPage());
+      let d=pg.slice(1,this.totalPage());
 
-        else if(this.props.page*1===this.totalPage()-3){
+        if(this.totalPage()>=8&&this.props.page<4){
+            return a.map(d=>{
+                return <button onClick={this.props.changePage} value={d} key={d}>{d}</button>
+            });
+        }
+        else if(this.totalPage()>=8&&this.props.page<this.totalPage()-3){
             return b.map(d=>{
                 return <button onClick={this.props.changePage} value={d} key={d}>{d}</button>
             });
         }
 
-        else if(this.props.page*1<=this.totalPage()-4&&this.props.page*1>1){
-            return d.map(d=>{
-                return <button onClick={this.props.changePage} value={d} key={d}>{d}</button>
-            });
-        }
-
-        else if(this.totalPage()===4){return c.map(d=>{
-            return <button onClick={this.props.changePage} value={d} key={d}>{d}</button>
-        });
-        }
-
-        else if(this.totalPage()===3){return e.map(d=>{
-            return <button onClick={this.props.changePage} value={d} key={d}>{d}</button>
-        });
-        }
-
-        else if(this.totalPage()===2){return f.map(d=>{
-            return <button onClick={this.props.changePage} value={d} key={d}>{d}</button>
-        });
-        }
-
-        else if(this.totalPage()===1){return g.map(d=>{
-            return <button onClick={this.props.changePage} value={d} key={d}>{d}</button>
-        });
-        }
-
-        else{
+        else if(this.totalPage()>=8&&this.props.page*1>=this.totalPage()-4){
             return c.map(d=>{
                 return <button onClick={this.props.changePage} value={d} key={d}>{d}</button>
             });
         }
 
+        else{
+            return d.map(d=>{
+                return <button onClick={this.props.changePage} value={d} key={d}>{d}</button>
+            });
+        }
+    };
 
+    // createButton=()=>{
+    //     let pg=[];
+    //     for(let i=1; i<this.totalPage()+1; i++)
+    //         pg.push(i);
+    //     let a=pg.slice(this.props.page-1,this.props.page-1+2);
+    //     let b=pg.slice(this.props.page-2,this.totalPage());
+    //     let c=pg.slice(this.totalPage()-4,this.totalPage());
+    //     let d=pg.slice(this.props.page-2,this.props.page-1+2);
+    //     let e=pg.slice(this.totalPage()-3,this.totalPage());
+    //     let f=pg.slice(this.totalPage()-2,this.totalPage());
+    //     let g=pg.slice(this.totalPage()-1,this.totalPage());
+    //     if(this.props.page*1<=this.totalPage()-4&&this.props.page*1===1){
+    //     return a.map(d=>{
+    //         return <button onClick={this.props.changePage} value={d} key={d}>{d}</button>
+    //     });
+    //     }
+    //
+    //     else if(this.props.page*1===this.totalPage()-3){
+    //         return b.map(d=>{
+    //             return <button onClick={this.props.changePage} value={d} key={d}>{d}</button>
+    //         });
+    //     }
+    //
+    //     else if(this.props.page*1<=this.totalPage()-4&&this.props.page*1>1){
+    //         return d.map(d=>{
+    //             return <button onClick={this.props.changePage} value={d} key={d}>{d}</button>
+    //         });
+    //     }
+    //
+    //     else if(this.totalPage()===4){return c.map(d=>{
+    //         return <button onClick={this.props.changePage} value={d} key={d}>{d}</button>
+    //     });
+    //     }
+    //
+    //     else if(this.totalPage()===3){return e.map(d=>{
+    //         return <button onClick={this.props.changePage} value={d} key={d}>{d}</button>
+    //     });
+    //     }
+    //
+    //     else if(this.totalPage()===2){return f.map(d=>{
+    //         return <button onClick={this.props.changePage} value={d} key={d}>{d}</button>
+    //     });
+    //     }
+    //
+    //     else if(this.totalPage()===1){return g.map(d=>{
+    //         return <button onClick={this.props.changePage} value={d} key={d}>{d}</button>
+    //     });
+    //     }
+    //
+    //     else{
+    //         return c.map(d=>{
+    //             return <button onClick={this.props.changePage} value={d} key={d}>{d}</button>
+    //         });
+    //     }
+    //
+    //
+    // };
+
+    changePage=(event)=>{
+        let val=event.target.value;
+        console.log(val);
+        if (event.target.value==="leftBtn")
+            this.setState({left:"left", page:this.state.page-1});
+        else if (event.target.value==="rightBtn")
+            this.setState({left:"right",page:this.state.page*1+1});
+        else
+            this.props.page=event.target.value
     };
 
     render() {
-        console.log(this.totalPage());
         return (
             <div>
+                <span>Showing {this.props.page*this.props.pageSize-(this.props.pageSize-1)} to {this.props.page*this.props.pageSize<=this.props.totalCount?this.props.page*this.props.pageSize:this.props.totalCount} of {this.props.totalCount} entries.</span>
                 <div className={styles.pagination}>
                     Page:{this.props.page}
                     {this.props.page*1===1
-                        ?<button disabled style={{cursor:"not-allowed"}} key="leftBtn"><i className="fas fa-angle-double-left"/></button>
-                        :<button key="leftBtn" onClick={this.props.changePageDown}><i className="fas fa-angle-double-left"/></button>
+                        ?<button disabled style={{cursor:"not-allowed"}} key="leftBtn" value="leftBtn"><i className="fas fa-angle-double-left"/></button>
+                        :<button key="leftBtn" value="leftBtn" onClick={this.props.changePageDown}><i className="fas fa-angle-double-left"/></button>
                     }
+                    {<button onClick={this.props.changePage} key={1} value={1}>{1}</button>}
+                    {this.totalPage()>=8&&this.props.page>=4?<button key="f1">...</button>:null}
                     {this.createButton()}
-                    {this.props.page*1<this.totalPage()-3?<button key="...">...</button>:null}
-                    {this.props.page*1<this.totalPage()-3?<button onClick={this.props.changePage} key={this.totalPage()} value={this.totalPage()}>{this.totalPage()}</button>:null}
+                    {this.totalPage()>=7&&this.props.page*1 <= this.totalPage()-4 ? <button key="f2">...</button> : null}
+                    {this.totalPage()>=7&&this.props.page*1<this.totalPage()-3?<button onClick={this.props.changePage} key={this.totalPage()} value={this.totalPage()}>{this.totalPage()}</button>:null}
                     {this.props.page*1===this.totalPage()*1
-                        ?<button disabled style={{cursor:"not-allowed"}} key="rightBtn"><i className="fas fa-angle-double-right"/></button>
-                        :<button key="rightBtn" onClick={this.props.changePageUp}><i className="fas fa-angle-double-right"/></button>
+                        ?<button disabled style={{cursor:"not-allowed"}} key="rightBtn" value="rightBtn"><i className="fas fa-angle-double-right"/></button>
+                        :<button key="rightBtn" value="rightBtn" onClick={this.props.changePageUp}><i className="fas fa-angle-double-right"/></button>
                     }
                 </div>
                 <div className={styles.pageSize}>

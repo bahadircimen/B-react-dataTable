@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import styles from "./styles.scss";
-import image from './sort.png';
 import Pagination from "../Pagination";
 class Table extends Component {
     constructor(props) {
@@ -35,7 +34,6 @@ class Table extends Component {
 
     renderTableHeader = (event) => {
         return this.props.columns.map(d => {
-            console.log(d.key);
             return(
             d.sortable===true
                 ?
@@ -141,10 +139,6 @@ class Table extends Component {
     //     theme===""||theme!==this.state.theme ?this.createCookie("themeCookie", [this.state.theme], 1):null;
     // };
 
-    checkTheme=()=>{
-        return this.state.theme||"";
-    };
-
     render() {
         return (
             <div id="div" className={"src-components-Table-___styles__"+this.props.theme+"___2bhYl"}>
@@ -169,16 +163,6 @@ class Table extends Component {
                     </tr>
                     </tfoot>
                 </table>
-                <Pagination
-                    pageSize={this.props.pageSize}
-                    totalCount={this.props.totalCount}
-                    changePage={this.props.changePage}
-                    changePageUp={this.props.changePageUp}
-                    changePageDown={this.props.changePageDown}
-                    changePageSize={this.props.changePageSize}
-                    page={this.props.page}
-                />
-                <span>Showing {this.props.page*10-9} to {this.props.page*10} of {this.props.totalCount} entries.</span>
                 <div>
                     <select name="" id="theme" onChange={this.props.changeTheme}>
                         <option value="light">Light</option>
