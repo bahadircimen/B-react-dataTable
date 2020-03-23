@@ -37,15 +37,19 @@ class MainContainer extends Component {
         this.setState({page:this.state.page-1})
     };
 
-    changePage=(event)=>{
-        let val=event.target.value;
-        console.log(val);
-        if (val===null)
-        this.setState({page:this.state.page-1});
-        else if (val==="rightBtn")
-        this.setState({page:this.state.page*1+1});
-        else
-        this.setState({page:event.target.value})
+    changePage=(change, isPageNumber = false)=>{
+        let {page} = this.state;
+        this.setState({ page: isPageNumber ? change : page + change });
+
+
+        // let val=event.target.value;
+        // console.log(val);
+        // if (val===null)
+        // this.setState({page:this.state.page-1});
+        // else if (val==="rightBtn")
+        // this.setState({page:this.state.page*1+1});
+        // else
+        // this.setState({page:event.target.value})
     };
 
     changePageSize=(event)=>{
