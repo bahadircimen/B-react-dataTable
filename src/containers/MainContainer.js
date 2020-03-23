@@ -4,6 +4,7 @@ import styles from "./styles.scss";
 import store from "../store";
 import Axios from "axios";
 import Pagination from "../components/Pagination";
+import Card from "../components/Card";
 
 class MainContainer extends Component {
     constructor(props) {
@@ -29,7 +30,6 @@ class MainContainer extends Component {
     };
 
     changePageUp=()=>{
-
        this.setState({page:this.state.page*1+1})
     };
 
@@ -38,13 +38,13 @@ class MainContainer extends Component {
     };
 
     changePage=(event)=>{
-        // let val=event.target.value;
-        // console.log(val);
-        // if (val===null)
-        // this.setState({page:this.state.page-1});
-        // else if (val==="rightBtn")
-        // this.setState({page:this.state.page*1+1});
-        // else
+        let val=event.target.value;
+        console.log(val);
+        if (val===null)
+        this.setState({page:this.state.page-1});
+        else if (val==="rightBtn")
+        this.setState({page:this.state.page*1+1});
+        else
         this.setState({page:event.target.value})
     };
 
@@ -58,6 +58,13 @@ class MainContainer extends Component {
         let data = res.data;
         this.setState({data, totalCount})
     }
+    // async componentDidMount() {
+    //     let res = await store.getData();
+    //     let data = res.data;
+    //     this.setState({data});
+    // }
+
+
 
     componentDidUpdate(prevProps, prevState) {
     this.state.page !== prevState.page||this.state.pageSize!==prevState.pageSize? this.componentDidMount():null
@@ -70,6 +77,7 @@ class MainContainer extends Component {
     }
 
     render() {
+        console.log(this.state.data)
         let {theme} = this.state;
         return (
             <Fragment>
@@ -92,6 +100,18 @@ class MainContainer extends Component {
                                 changePageSize={this.changePageSize}
                             />
                         </div>
+                            {/*{*/}
+                            {/*    this.state.data.map((d,index)=>{*/}
+                            {/*        return <div key={d.id} className={styles.colMd3}>*/}
+                            {/*            <Card*/}
+                            {/*                author={d.author}*/}
+                            {/*                download_url={d.download_url}*/}
+                            {/*                width={d.width}*/}
+                            {/*                height={d.height}*/}
+                            {/*            />*/}
+                            {/*        </div>*/}
+                            {/*    })*/}
+                            {/*}*/}
                     </div>
                 </div>
             </Fragment>

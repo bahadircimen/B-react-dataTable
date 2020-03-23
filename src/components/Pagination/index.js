@@ -142,7 +142,7 @@ class Pagination extends Component {
                     {this.totalPage()>=7&&this.props.page*1<this.totalPage()-3?<button onClick={this.props.changePage} key={this.totalPage()} value={this.totalPage()}>{this.totalPage()}</button>:null}
                     {this.props.page*1===this.totalPage()*1
                         ?<button disabled style={{cursor:"not-allowed"}} key="rightBtn" value="rightBtn"><i className="fas fa-angle-double-right"/></button>
-                        :<button key="rightBtn" value="rightBtn" onClick={this.props.changePageUp}><i className="fas fa-angle-double-right"/></button>
+                        :<button key="rightBtn" value="rightBtn" onClick={this.props.changePage}><i className="fas fa-angle-double-right"/></button>
                     }
                 </div>
                 <div className={styles.pageSize}>
