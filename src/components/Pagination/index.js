@@ -114,6 +114,17 @@ class Pagination extends Component {
     //
     // };
 
+    changePage=(event)=>{
+        let val=event.target.value;
+        console.log(val);
+        if (event.target.value==="leftBtn")
+            this.setState({left:"left", page:this.state.page-1});
+        else if (event.target.value==="rightBtn")
+            this.setState({left:"right",page:this.state.page*1+1});
+        else
+            this.props.page=event.target.value
+    };
+
     render() {
         return (
             <div>
@@ -122,16 +133,16 @@ class Pagination extends Component {
                     Page:{this.props.page}
                     {this.props.page*1===1
                         ?<button disabled style={{cursor:"not-allowed"}} key="leftBtn" value="leftBtn"><i className="fas fa-angle-double-left"/></button>
-                        :<button key="leftBtn" value="leftBtn" onClick={() => this.props.changePage(-1)}><i className="fas fa-angle-double-left"/></button>
+                        :<button key="leftBtn" value="leftBtn" onClick={this.props.changePageDown}><i className="fas fa-angle-double-left"/></button>
                     }
                     {<button onClick={() => this.props.changePage(1, true)} key={1} value={1}>{1}</button>}
                     {this.totalPage()>=8&&this.props.page>=4?<button key="f1">...</button>:null}
                     {this.createButton()}
                     {this.totalPage()>=7&&this.props.page*1 <= this.totalPage()-4 ? <button key="f2">...</button> : null}
-                    {this.totalPage()>=7&&this.props.page*1<this.totalPage()-3?<button onClick={() => this.props.changePage(this.totalPage(), true)} key={this.totalPage()} value={this.totalPage()}>{this.totalPage()}</button>:null}
+                    {this.totalPage()>=7&&this.props.page*1<this.totalPage()-3?<button onClick={this.props.changePage} key={this.totalPage()} value={this.totalPage()}>{this.totalPage()}</button>:null}
                     {this.props.page*1===this.totalPage()*1
                         ?<button disabled style={{cursor:"not-allowed"}} key="rightBtn" value="rightBtn"><i className="fas fa-angle-double-right"/></button>
-                        :<button key="rightBtn" value="rightBtn" onClick={() => this.props.changePage(1)}><i className="fas fa-angle-double-right"/></button>
+                        :<button key="rightBtn" value="rightBtn" onClick={this.props.changePage}><i className="fas fa-angle-double-right"/></button>
                     }
                 </div>
                 <div className={styles.pageSize}>
