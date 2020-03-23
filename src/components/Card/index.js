@@ -20,10 +20,10 @@ class Card extends Component {
                     </div>
                     <div className={styles.cardBody}>
                         <img src={download_url} alt="" style={{width:"280px",height:`${height/(width/280)}px`}}/>
-                        {height/(width/280)}
                     </div>
                     <div className={styles.cardFooter}>
-
+                        Original Size: {width}*{height}px
+                        <a href={download_url}><i className="fas fa-download fa-lg"/></a>
                     </div>
                 </div>
             </div>

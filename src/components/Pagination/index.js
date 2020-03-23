@@ -34,24 +34,24 @@ class Pagination extends Component {
 
         if(this.totalPage()>=8&&this.props.page<4){
             return a.map(d=>{
-                return <button onClick={this.props.changePage} value={d} key={d}>{d}</button>
+                return <button onClick={() => this.props.changePage(d, true)} value={d} key={d}>{d}</button>
             });
         }
         else if(this.totalPage()>=8&&this.props.page<this.totalPage()-3){
             return b.map(d=>{
-                return <button onClick={this.props.changePage} value={d} key={d}>{d}</button>
+                return <button onClick={() => this.props.changePage(d, true)} value={d} key={d}>{d}</button>
             });
         }
 
         else if(this.totalPage()>=8&&this.props.page*1>=this.totalPage()-4){
             return c.map(d=>{
-                return <button onClick={this.props.changePage} value={d} key={d}>{d}</button>
+                return <button onClick={() => this.props.changePage(d, true)} value={d} key={d}>{d}</button>
             });
         }
 
         else{
             return d.map(d=>{
-                return <button onClick={this.props.changePage} value={d} key={d}>{d}</button>
+                return <button onClick={() => this.props.changePage(d, true)} value={d} key={d}>{d}</button>
             });
         }
     };
@@ -124,7 +124,7 @@ class Pagination extends Component {
                         ?<button disabled style={{cursor:"not-allowed"}} key="leftBtn" value="leftBtn"><i className="fas fa-angle-double-left"/></button>
                         :<button key="leftBtn" value="leftBtn" onClick={() => this.props.changePage(-1)}><i className="fas fa-angle-double-left"/></button>
                     }
-                    {<button onClick={this.props.changePage} key={1} value={1}>{1}</button>}
+                    {<button onClick={() => this.props.changePage(1, true)} key={1} value={1}>{1}</button>}
                     {this.totalPage()>=8&&this.props.page>=4?<button key="f1">...</button>:null}
                     {this.createButton()}
                     {this.totalPage()>=7&&this.props.page*1 <= this.totalPage()-4 ? <button key="f2">...</button> : null}

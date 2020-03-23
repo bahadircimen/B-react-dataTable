@@ -29,27 +29,27 @@ class MainContainer extends Component {
         })
     };
 
-    changePageUp=()=>{
-       this.setState({page:this.state.page*1+1})
-    };
-
-    changePageDown=()=>{
-        this.setState({page:this.state.page-1})
-    };
-
-    changePage=(change, isPageNumber = false)=>{
+    // changePageUp=()=>{
+    //    this.setState({page:this.state.page*1+1})
+    // };
+    //
+    // changePageDown=()=>{
+    //     this.setState({page:this.state.page-1})
+    // };
+    //
+    // changePage=(event)=>{
+    //     let val=event.target.value;
+    //     console.log(val);
+    //     if (val===null)
+    //     this.setState({page:this.state.page-1});
+    //     else if (val==="rightBtn")
+    //     this.setState({page:this.state.page*1+1});
+    //     else
+    //     this.setState({page:event.target.value})
+    // };
+    changePage=(change, isPageNumber = false)=> {
         let {page} = this.state;
-        this.setState({ page: isPageNumber ? change : page + change });
-
-
-        // let val=event.target.value;
-        // console.log(val);
-        // if (val===null)
-        // this.setState({page:this.state.page-1});
-        // else if (val==="rightBtn")
-        // this.setState({page:this.state.page*1+1});
-        // else
-        // this.setState({page:event.target.value})
+        this.setState({page: isPageNumber ? change : page*1 + change});
     };
 
     changePageSize=(event)=>{
@@ -104,18 +104,18 @@ class MainContainer extends Component {
                                 changePageSize={this.changePageSize}
                             />
                         </div>
-                            {/*{*/}
-                            {/*    this.state.data.map((d,index)=>{*/}
-                            {/*        return <div key={d.id} className={styles.colMd3}>*/}
-                            {/*            <Card*/}
-                            {/*                author={d.author}*/}
-                            {/*                download_url={d.download_url}*/}
-                            {/*                width={d.width}*/}
-                            {/*                height={d.height}*/}
-                            {/*            />*/}
-                            {/*        </div>*/}
-                            {/*    })*/}
-                            {/*}*/}
+                        {/*    {*/}
+                        {/*        this.state.data.map((d,index)=>{*/}
+                        {/*            return <div key={d.id} className={styles.colMd3}>*/}
+                        {/*                <Card*/}
+                        {/*                    author={d.author}*/}
+                        {/*                    download_url={d.download_url}*/}
+                        {/*                    width={d.width}*/}
+                        {/*                    height={d.height}*/}
+                        {/*                />*/}
+                        {/*            </div>*/}
+                        {/*        })*/}
+                        {/*    }*/}
                     </div>
                 </div>
             </Fragment>
