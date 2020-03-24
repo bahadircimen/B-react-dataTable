@@ -2,7 +2,6 @@ import React, {Component, Fragment, useEffect, useState} from 'react';
 import Table from "../components/Table";
 import styles from "./styles.scss";
 import store from "../store";
-import Axios from "axios";
 import Pagination from "../components/Pagination";
 import Card from "../components/Card";
 import Skeleton from "../components/Skeleton";
@@ -52,18 +51,16 @@ class MainContainer extends Component {
     // }
 
     handleScroll = () => {
-        window.innerHeight + document.documentElement.scrollTop
-        === document.documentElement.offsetHeight?
-            this.setState({page:this.state.page*1+1}):null;
+        window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight
+            ?this.setState({page:this.state.page*1+1})
+            :null;
     };
 
         async componentDidMount() {
         this.setState({ loading: true });
         let res = await store.getData({page:this.state.page});
         let data = res.data;
-        this.setState({photos:[...this.state.photos,...data]});
-        this.setState({loading:false});
-        window.addEventListener('scroll', this.handleScroll);
+        this.setState({photos:[...this.state.photos,...data],loading:false});
     }
 
     componentWillUnmount() {
@@ -71,7 +68,38 @@ class MainContainer extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-    this.state.page !== prevState.page||this.state.pageSize!==prevState.pageSize? this.componentDidMount():null
+    this.state.page !== prevState.page||this.state.pageSize!==prevState.pageSize? this.componentDidMount():null;
+        window.addEventListener('scroll', this.handleScroll);
+    }
+
+    renderSkeleton() {
+        let dummyPhotos = [];
+        for (let i=1; i<13; i++)
+            dummyPhotos.push(i);
+        return dummyPhotos.map(d => {
+            return (
+                <div key={d} className={styles.colMd3}>
+                    <Skeleton/>
+                </div>
+            );
+        });
+    }
+
+    renderCard() {
+        let {photos} = this.state;
+
+        return photos.map((d,index) => {
+            return (
+                <div key={index} className={styles.colMd3}>
+                    <Card
+                        author={d.author}
+                        download_url={d.download_url}
+                        width={d.width}
+                        height={d.height}
+                    />
+                </div>
+            );
+        });
     }
 
     render() {
@@ -80,9 +108,7 @@ class MainContainer extends Component {
             <Fragment>
                 <div className={styles[`container${theme}`]}>
                     <div className={styles.row}>
-                        <div className={styles.colMd3}>
-                            <Skeleton/>
-                        </div>
+
                         {/*<div className={styles.colMd9}>*/}
                         {/*    <Table*/}
                         {/*        theme={this.state.theme}*/}
@@ -100,31 +126,10 @@ class MainContainer extends Component {
                         {/*        changePageSize={this.changePageSize}*/}
                         {/*    />*/}
                         {/*</div>*/}
-                            {
-                                this.state.photos.map((d,index)=>{
-                                      return <div key={index} className={styles.colMd3}>
-                                              {this.state.loading?<Skeleton/>:
-                                          <Card
-                                            loading={this.state.loading}
-                                            author={d.author}
-                                            download_url={d.download_url}
-                                            width={d.width}
-                                            height={d.height}
-                                        />}
-                                    </div>
-                                })
-                            }
 
-                                {/*<div key={1} className={styles.colMd3}>*/}
-                                {/*    {this.state.photos.map((d,index)=>{*/}
-                                {/*    return <Card*/}
-                                {/*    author={d.author}*/}
-                                {/*    download_url={d.download_url}*/}
-                                {/*    width={d.width}*/}
-                                {/*    height={d.height}*/}
-                                {/*/>*/}
-                                {/*})}*/}
-                                {/*</div>*/}
+                        {this.renderCard()}
+                        {(this.state.loading || !this.state.photos.length) && this.renderSkeleton()}
+
                     </div>
                 </div>
             </Fragment>

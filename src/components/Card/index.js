@@ -4,30 +4,31 @@ import styles from "./styles.scss";
 
 
 class Card extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            loading: true
+        }
+    }
+
     render() {
         let {author,download_url,width,height}=this.props;
-        let a=download_url.split("/");
-        let b=[];
-            b.push(a);
-            b.map(d=>{return d});
-        //let b=a.map(d=>{return d[0]});
         return (
-            <div>
-                {this.props.loading ?<div className={styles.cartt}>sahdbashdbsajbhdsajbhdjsabdjsabdjsa</div>:
-                    <div className={styles.card}>
+            <div hidden={this.state.loading} onLoad={() => this.setState({ loading: false })}>
+                <div className={styles.card}>
                         <div className={styles.cardHeader}>
                             {author}
                         </div>
                         <div className={styles.cardBody}>
-                            <img src={download_url} alt=""
+                            <img hidden={this.state.loading} src={download_url} alt="" onLoad={() => this.setState({ loading: false })}
                                  style={{width: "280px", height: `${height / (width / 280)}px`}}/>
+                            {this.state.loading && <i style={{padding:"20px"}} className="fas fa-images fa-10x"/>}
                         </div>
                         <div className={styles.cardFooter}>
                             Original Size: {width}*{height}px
                             <a href={download_url}><i className="fas fa-download fa-lg"/></a>
                         </div>
                     </div>
-                }
             </div>
         );
     }
