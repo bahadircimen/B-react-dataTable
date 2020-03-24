@@ -1,10 +1,11 @@
-import React, {Component, Fragment} from 'react';
+import React, {Component, Fragment, useEffect, useState} from 'react';
 import Table from "../components/Table";
 import styles from "./styles.scss";
 import store from "../store";
 import Axios from "axios";
 import Pagination from "../components/Pagination";
 import Card from "../components/Card";
+import Skeleton from "../components/Skeleton";
 
 class MainContainer extends Component {
     constructor(props) {
@@ -20,6 +21,10 @@ class MainContainer extends Component {
             page:"1",
             pageSize:"10",
             theme:"light",
+            photosCol:[],
+            photos:[],
+            loading:false,
+            prevY:0
         }
     }
 
@@ -29,24 +34,6 @@ class MainContainer extends Component {
         })
     };
 
-    // changePageUp=()=>{
-    //    this.setState({page:this.state.page*1+1})
-    // };
-    //
-    // changePageDown=()=>{
-    //     this.setState({page:this.state.page-1})
-    // };
-    //
-    // changePage=(event)=>{
-    //     let val=event.target.value;
-    //     console.log(val);
-    //     if (val===null)
-    //     this.setState({page:this.state.page-1});
-    //     else if (val==="rightBtn")
-    //     this.setState({page:this.state.page*1+1});
-    //     else
-    //     this.setState({page:event.target.value})
-    // };
     changePage=(change, isPageNumber = false)=> {
         let {page} = this.state;
         this.setState({page: isPageNumber ? change : page*1 + change});
@@ -56,66 +43,88 @@ class MainContainer extends Component {
         this.setState({pageSize:event.target.value, page:1});
     };
 
-    async componentDidMount() {
-        let res = await store.getOtherData({page: this.state.page, pageSize: this.state.pageSize});
-        let totalCount = res.headers["x-total-count"];
-        let data = res.data;
-        this.setState({data, totalCount})
-    }
+
     // async componentDidMount() {
-    //     let res = await store.getData();
+    //     let res = await store.getOtherData({page: this.state.page, pageSize: this.state.pageSize});
+    //     let totalCount = res.headers["x-total-count"];
     //     let data = res.data;
-    //     this.setState({data});
+    //     this.setState({data, totalCount})
     // }
 
+    handleScroll = () => {
+        window.innerHeight + document.documentElement.scrollTop
+        === document.documentElement.offsetHeight?
+            this.setState({page:this.state.page*1+1}):null;
+    };
 
-
-    componentDidUpdate(prevProps, prevState) {
-    this.state.page !== prevState.page||this.state.pageSize!==prevState.pageSize? this.componentDidMount():null
-
+        async componentDidMount() {
+        this.setState({ loading: true });
+        let res = await store.getData({page:this.state.page});
+        let data = res.data;
+        this.setState({photos:[...this.state.photos,...data]});
+        this.setState({loading:false});
+        window.addEventListener('scroll', this.handleScroll);
     }
 
     componentWillUnmount() {
-        this.mounted = false;
+        window.removeEventListener('scroll', this.handleScroll);
+    }
 
+    componentDidUpdate(prevProps, prevState) {
+    this.state.page !== prevState.page||this.state.pageSize!==prevState.pageSize? this.componentDidMount():null
     }
 
     render() {
-        console.log(this.state.data)
         let {theme} = this.state;
         return (
             <Fragment>
                 <div className={styles[`container${theme}`]}>
                     <div className={styles.row}>
-                        <div className={styles.colMd9}>
-                            <Table
-                                theme={this.state.theme}
-                                changeTheme={this.changeTheme}
-                                data={this.state.data}
-                                columns={this.state.columns}
-                            />
-                            <Pagination
-                                page={this.state.page}
-                                pageSize={this.state.pageSize}
-                                totalCount={this.state.totalCount}
-                                changePage={this.changePage}
-                                changePageUp={this.changePageUp}
-                                changePageDown={this.changePageDown}
-                                changePageSize={this.changePageSize}
-                            />
+                        <div className={styles.colMd3}>
+                            <Skeleton/>
                         </div>
-                        {/*    {*/}
-                        {/*        this.state.data.map((d,index)=>{*/}
-                        {/*            return <div key={d.id} className={styles.colMd3}>*/}
-                        {/*                <Card*/}
-                        {/*                    author={d.author}*/}
-                        {/*                    download_url={d.download_url}*/}
-                        {/*                    width={d.width}*/}
-                        {/*                    height={d.height}*/}
-                        {/*                />*/}
-                        {/*            </div>*/}
-                        {/*        })*/}
-                        {/*    }*/}
+                        {/*<div className={styles.colMd9}>*/}
+                        {/*    <Table*/}
+                        {/*        theme={this.state.theme}*/}
+                        {/*        changeTheme={this.changeTheme}*/}
+                        {/*        data={this.state.data}*/}
+                        {/*        columns={this.state.columns}*/}
+                        {/*    />*/}
+                        {/*    <Pagination*/}
+                        {/*        page={this.state.page}*/}
+                        {/*        pageSize={this.state.pageSize}*/}
+                        {/*        totalCount={this.state.totalCount}*/}
+                        {/*        changePage={this.changePage}*/}
+                        {/*        changePageUp={this.changePageUp}*/}
+                        {/*        changePageDown={this.changePageDown}*/}
+                        {/*        changePageSize={this.changePageSize}*/}
+                        {/*    />*/}
+                        {/*</div>*/}
+                            {
+                                this.state.photos.map((d,index)=>{
+                                      return <div key={index} className={styles.colMd3}>
+                                              {this.state.loading?<Skeleton/>:
+                                          <Card
+                                            loading={this.state.loading}
+                                            author={d.author}
+                                            download_url={d.download_url}
+                                            width={d.width}
+                                            height={d.height}
+                                        />}
+                                    </div>
+                                })
+                            }
+
+                                {/*<div key={1} className={styles.colMd3}>*/}
+                                {/*    {this.state.photos.map((d,index)=>{*/}
+                                {/*    return <Card*/}
+                                {/*    author={d.author}*/}
+                                {/*    download_url={d.download_url}*/}
+                                {/*    width={d.width}*/}
+                                {/*    height={d.height}*/}
+                                {/*/>*/}
+                                {/*})}*/}
+                                {/*</div>*/}
                     </div>
                 </div>
             </Fragment>
