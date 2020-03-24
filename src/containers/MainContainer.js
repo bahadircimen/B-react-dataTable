@@ -3,8 +3,7 @@ import Table from "../components/Table";
 import styles from "./styles.scss";
 import store from "../store";
 import Pagination from "../components/Pagination";
-import Card from "../components/Card";
-import Skeleton from "../components/Skeleton";
+
 
 class MainContainer extends Component {
     constructor(props) {
@@ -20,10 +19,6 @@ class MainContainer extends Component {
             page:"1",
             pageSize:"10",
             theme:"light",
-            photosCol:[],
-            photos:[],
-            loading:false,
-            prevY:0
         }
     }
 
@@ -43,12 +38,12 @@ class MainContainer extends Component {
     };
 
 
-    // async componentDidMount() {
-    //     let res = await store.getOtherData({page: this.state.page, pageSize: this.state.pageSize});
-    //     let totalCount = res.headers["x-total-count"];
-    //     let data = res.data;
-    //     this.setState({data, totalCount})
-    // }
+    async componentDidMount() {
+        let res = await store.getOtherData({page: this.state.page, pageSize: this.state.pageSize});
+        let totalCount = res.headers["x-total-count"];
+        let data = res.data;
+        this.setState({data, totalCount})
+    }
 
     handleScroll = () => {
         window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight
@@ -56,50 +51,9 @@ class MainContainer extends Component {
             :null;
     };
 
-        async componentDidMount() {
-        this.setState({ loading: true });
-        let res = await store.getData({page:this.state.page});
-        let data = res.data;
-        this.setState({photos:[...this.state.photos,...data],loading:false});
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('scroll', this.handleScroll);
-    }
 
     componentDidUpdate(prevProps, prevState) {
     this.state.page !== prevState.page||this.state.pageSize!==prevState.pageSize? this.componentDidMount():null;
-        window.addEventListener('scroll', this.handleScroll);
-    }
-
-    renderSkeleton() {
-        let dummyPhotos = [];
-        for (let i=1; i<13; i++)
-            dummyPhotos.push(i);
-        return dummyPhotos.map(d => {
-            return (
-                <div key={d} className={styles.colMd3}>
-                    <Skeleton/>
-                </div>
-            );
-        });
-    }
-
-    renderCard() {
-        let {photos} = this.state;
-
-        return photos.map((d,index) => {
-            return (
-                <div key={index} className={styles.colMd3}>
-                    <Card
-                        author={d.author}
-                        download_url={d.download_url}
-                        width={d.width}
-                        height={d.height}
-                    />
-                </div>
-            );
-        });
     }
 
     render() {
@@ -108,28 +62,23 @@ class MainContainer extends Component {
             <Fragment>
                 <div className={styles[`container${theme}`]}>
                     <div className={styles.row}>
-
-                        {/*<div className={styles.colMd9}>*/}
-                        {/*    <Table*/}
-                        {/*        theme={this.state.theme}*/}
-                        {/*        changeTheme={this.changeTheme}*/}
-                        {/*        data={this.state.data}*/}
-                        {/*        columns={this.state.columns}*/}
-                        {/*    />*/}
-                        {/*    <Pagination*/}
-                        {/*        page={this.state.page}*/}
-                        {/*        pageSize={this.state.pageSize}*/}
-                        {/*        totalCount={this.state.totalCount}*/}
-                        {/*        changePage={this.changePage}*/}
-                        {/*        changePageUp={this.changePageUp}*/}
-                        {/*        changePageDown={this.changePageDown}*/}
-                        {/*        changePageSize={this.changePageSize}*/}
-                        {/*    />*/}
-                        {/*</div>*/}
-
-                        {this.renderCard()}
-                        {(this.state.loading || !this.state.photos.length) && this.renderSkeleton()}
-
+                        <div className={styles.colMd9}>
+                            <Table
+                                theme={this.state.theme}
+                                changeTheme={this.changeTheme}
+                                data={this.state.data}
+                                columns={this.state.columns}
+                            />
+                            <Pagination
+                                page={this.state.page}
+                                pageSize={this.state.pageSize}
+                                totalCount={this.state.totalCount}
+                                changePage={this.changePage}
+                                changePageUp={this.changePageUp}
+                                changePageDown={this.changePageDown}
+                                changePageSize={this.changePageSize}
+                            />
+                        </div>
                     </div>
                 </div>
             </Fragment>
